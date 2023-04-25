@@ -118,7 +118,7 @@ void setup() {
     motors[i] = new AccelStepper(AccelStepper::DRIVER, steppers_pins[i][0], steppers_pins[i][1]);
   }
 
-  set_microstepping(8);
+  // set_microstepping(8);
   set_speed(800);
   set_acceleration(800);
 

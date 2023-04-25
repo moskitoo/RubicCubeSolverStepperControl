@@ -50,18 +50,22 @@ uint8_t microstepping_pins[6][3] = {
 
 #define motorInterfaceType 1
 
+int microstepping = 1;
+int speed = 10000;
+int acceleration = 10000;
+
 const byte num_steppers = 6;
 AccelStepper **motors;
 
-void set_speed(int speed){
+void set_speed(int speed, int microstepping){
   for (int i = 0; i < 6; i++){
-    motors[i]->setMaxSpeed(speed);
+    motors[i]->setMaxSpeed(speed * microstepping);
   }
 }
 
-void set_acceleration(int acceleration){
+void set_acceleration(int acceleration, int microstepping){
   for (int i = 0; i < 6; i++){
-    motors[i]->setAcceleration(acceleration);
+    motors[i]->setAcceleration(acceleration * microstepping);
   }
 }
 
@@ -99,15 +103,15 @@ void set_microstepping(int stepping){
 // // WPAKOWAC SILNIKI DO LISTY I LECAC PO LISCIE USTAIWAC IM USTAIWENIA.
 // // PRZETESTWOWAC LIMITY PREDKOSCI I PZEYPSIESZENIA
 
-void move_stepper(int stepper_id, char move_type){
+void move_stepper(int stepper_id, char move_type, int microstep){
   if (move_type == '1') {
-      motors[stepper_id]->move(-50);
+      motors[stepper_id]->move(-50 * microstep);
     }
   else if (move_type == '2') {
-      motors[stepper_id]->move(100);
+      motors[stepper_id]->move(100 * microstep);
     }
   else {
-      motors[stepper_id]->move(50);
+      motors[stepper_id]->move(50 * microstep);
     }
 }
 
@@ -118,9 +122,9 @@ void setup() {
     motors[i] = new AccelStepper(AccelStepper::DRIVER, steppers_pins[i][0], steppers_pins[i][1]);
   }
 
-  // set_microstepping(8);
-  set_speed(800);
-  set_acceleration(800);
+  set_microstepping(microstepping);
+  set_speed(speed, microstepping);
+  set_acceleration(acceleration, microstepping);
 
   Serial.begin(9600);
 }
@@ -133,22 +137,22 @@ void loop() {
     Serial.println(message[0]);
     
     if (message[0] == 'U'){
-      move_stepper(0, message[1]);
+      move_stepper(0, message[1], microstepping);
     }
     else if (message[0] == 'R') {
-        move_stepper(1, message[1]);
+        move_stepper(1, message[1], microstepping);
       }
     else if (message[0] == 'F') {
-        move_stepper(2, message[1]);
+        move_stepper(2, message[1], microstepping);
       }
     else if (message[0] =='D') {
-      move_stepper(3, message[1]);
+      move_stepper(3, message[1], microstepping);
       }
     else if (message[0] == 'L') {
-        move_stepper(4, message[1]);
+        move_stepper(4, message[1], microstepping);
       }
     else if (message[0] == 'B') {
-        move_stepper(5, message[1]);
+        move_stepper(5, message[1], microstepping);
       }
     Serial.read();
   }

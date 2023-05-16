@@ -82,9 +82,6 @@ void set_microstepping(int stepping){
     }
 }
 
-// // WPAKOWAC SILNIKI DO LISTY I LECAC PO LISCIE USTAIWAC IM USTAIWENIA.
-// // PRZETESTWOWAC LIMITY PREDKOSCI I PZEYPSIESZENIA
-
 void move_stepper(int stepper_id, char move_type, int microstep){
   if (move_type == '1') {
       motors[stepper_id]->move(-50 * microstep);
@@ -120,21 +117,27 @@ void loop() {
     
     if (message[0] == 'U'){
       move_stepper(0, message[1], microstepping);
+      Serial.print("move completed");
     }
     else if (message[0] == 'R') {
         move_stepper(1, message[1], microstepping);
+        Serial.print("move completed");
       }
     else if (message[0] == 'F') {
         move_stepper(2, message[1], microstepping);
+        Serial.print("move completed");
       }
     else if (message[0] =='D') {
       move_stepper(3, message[1], microstepping);
+      Serial.print("move completed");
       }
     else if (message[0] == 'L') {
         move_stepper(4, message[1], microstepping);
+        Serial.print("move completed");
       }
     else if (message[0] == 'B') {
         move_stepper(5, message[1], microstepping);
+        Serial.print("move completed");
       }
     Serial.read();
   }

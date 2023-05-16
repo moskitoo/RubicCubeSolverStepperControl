@@ -50,9 +50,9 @@ uint8_t microstepping_pins[6][3] = {
 
 #define motorInterfaceType 1
 
-int microstepping = 1;
-int speed = 10000;
-int acceleration = 10000;
+int microstepping = 16;
+int speed = 1000;
+int acceleration = 2000;
 
 const byte num_steppers = 6;
 AccelStepper **motors;
